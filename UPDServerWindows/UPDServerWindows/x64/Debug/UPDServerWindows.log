@@ -1,0 +1,4 @@
+﻿  UPDServerWindows.cpp
+C:\Users\blair\source\repos\UPDServerWindows\UPDServerWindows\UPDServerWindows.cpp(13,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
+C:\Users\blair\source\repos\UPDServerWindows\UPDServerWindows\UPDServerWindows.cpp(31,91): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  UPDServerWindows.vcxproj -> C:\Users\blair\source\repos\UPDServerWindows\x64\Debug\UPDServerWindows.exe
