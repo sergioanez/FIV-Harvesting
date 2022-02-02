@@ -19,6 +19,12 @@ int yAccel = 200;
 long xA_pos  = 1;
 long new_xA_pos;
 
+int distance = 60;
+
+int steps = (distance * 3200) / (2 * 3.1459265 * 6.3661977);
+
+
+
 void setup() {
   xA_axis.setMaxSpeed(xSpd);
   xA_axis.setAcceleration(xAccel);
@@ -28,8 +34,14 @@ Serial.println("Encoder Test:");
 }
 
 void loop() {
-  xAxisForward(3200);
-  xAxisBackward(-3200);
+  
+    if (Serial.available() > 0 ){      
+         distance = Serial.parseInt();
+         steps = (distance * 3200) / (2 * 3.1459265 * 6.3661977);
+  }
+  xAxisForward(steps);
+  xAxisBackward(-1*steps);
+  
 }
 
 
@@ -44,9 +56,9 @@ int xAxisForward (int dist) {
     xA_axis.run();
     new_xA_pos = xA_encoder.read() *0.09;
     if (new_xA_pos != xA_pos) {
-      Serial.print("count = ");
-      Serial.print(new_xA_pos);
-      Serial.println();
+     // Serial.print("count = ");
+      //Serial.print(new_xA_pos);
+      //Serial.println();
       xA_pos = new_xA_pos;
     }
   }
@@ -60,9 +72,9 @@ int xAxisBackward (int dist) {
     xA_axis.run();
     new_xA_pos = xA_encoder.read() * 0.09;
     if (new_xA_pos != xA_pos) {
-      Serial.print("count = ");
-      Serial.print(new_xA_pos);
-      Serial.println();
+      //Serial.print("count = ");
+      //Serial.print(new_xA_pos);
+      //Serial.println();
       xA_pos = new_xA_pos;
     }
   }
