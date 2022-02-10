@@ -98,11 +98,11 @@ void loop() {
 float parseInputPos(String in, char coord) {
   String sub  = "";
   float val  = 0;
-  if (coord == 'x') {
+  if (coord == 'x' &&  in.substring(0,1)=='<') {
     sub  = in.substring(in.indexOf('X') + 1, in.indexOf('Y'));
     val = sub.toFloat();
   }
-  if (coord == 'y') {
+  if (coord == 'y' && in.substring(0,1)=='<') {
     sub  = in.substring(in.indexOf('Y') + 1, in.indexOf('>'));
     val = sub.toFloat();
   }
