@@ -56,7 +56,7 @@ void setup() {
 void loop() {
   //Read Serial
   if (Serial.available()) {       // Check if there's data
-    dataIn = Serial.readString();           // Read said data into the variable "in"
+    dataIn = Serial.readString();           // Read said data into the variable "in" <X345.3Y34532.3>
     xPos = parseInputPos(dataIn, 'x');
     yPos = parseInputPos(dataIn, 'y');
 
@@ -90,11 +90,11 @@ void loop() {
 float parseInputPos(String in, char coord) {
   String sub  = "";
   float val  = 0;
-  if (coord == 'x') {
+  if (coord == 'x' &&  in.substring(0,1)=='<') {
     sub  = in.substring(in.indexOf('X') + 1, in.indexOf('Y'));
     val = sub.toFloat();
   }
-  if (coord == 'y') {
+  if (coord == 'y' && in.substring(0,1)=='<') {
     sub  = in.substring(in.indexOf('Y') + 1, in.indexOf('>'));
     val = sub.toFloat();
   }
