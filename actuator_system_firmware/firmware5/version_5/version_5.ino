@@ -82,7 +82,7 @@ void loop() {
     xA_axis.move(xA_pos_correction);
     xA_axis.move(xA_pos_correction);
 
-    while (xA_encoder_pos != xPos || xA_encoder_pos != xPos) {
+    while (xA_axis.distanceToGo != 0 || xB_axis.distanceToGo != 0) {
       xA_axis.run();
       xB_axis.run();
     }
