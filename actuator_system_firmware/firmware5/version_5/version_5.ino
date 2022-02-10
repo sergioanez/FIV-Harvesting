@@ -35,7 +35,6 @@ long xA_pos  = 1;
 long new_xA_pos;
 
 int distance = 60;
-
 int steps = (distance * 3200) / (2 * 3.1459265 * 6.3661977);
 
 //Setup on boot
@@ -65,29 +64,35 @@ void loop() {
   }
 
   // Read Encoder Digital
-  xA_encoder_pos = xA_encoder.read() * 2 * 3.1459265 * 6.3661977; // total_steps; //in mm
-  xB_encoder_pos = xB_encoder.read() * 2 * 3.1459265 * 6.3661977; // total_steps; //in mm
-  y_encoder_pos = y_encoder.read() * 2 * 3.1459265 * 6.3661977; // total_steps; //in mm
+  xA_encoder_pos = xA_encoder.read() * 2 * 3.1459265 * 6.3661977; // encoder position in mm
+  xB_encoder_pos = xB_encoder.read() * 2 * 3.1459265 * 6.3661977; // encoder position in mm
+  y_encoder_pos = y_encoder.read() * 2 * 3.1459265 * 6.3661977; // encoder position in mm
 
 
 
   // Closed-Loop: Correct the stepper position
   if (xA_encoder_pos != xPos || xA_encoder_pos != xPos && xA_axis.isRunning() == false && xB_axis.isRunning() == false) {
-    //if the accelstepper postion and the encoder postion dont match, also the motor is not running
-    //reset the position in accel stepper to match the encoder position
+    //if the desired postion and the encoder postion dont match, also the motor is not running
 
-    xA_pos_correction = xPos - xA_encoder_pos;
-    xB_pos_correction = xPos - xB_encoder_pos;
+    // correct x_axis motors without running the rest of the firmware
+    while (xA_encoder_pos != xPos || xA_encoder_pos != xPos) {
 
-    xA_axis.move(xA_pos_correction);
-    xA_axis.move(xA_pos_correction);
-
-    while (xA_axis.distanceToGo != 0 || xB_axis.distanceToGo != 0) {
-      xA_axis.run();
-      xB_axis.run();
+      xA_pos_correction = (xPos - xA_encoder_pos) * 3200) / (2 * 3.1459265 * 6.3661977); // determine how many steps are missed for xA motor
+      xB_pos_correction = (xPos - xB_encoder_pos) * 3200) / (2 * 3.1459265 * 6.3661977); // determine how many steps are missed for xB motor
+      xA_axis.move(xA_pos_correction); // set number of steps to move for xA motor
+      xA_axis.move(xA_pos_correction); // set number of steps to move for xB motor
+      
+      // run x_axis motors to corrected position without running the rest of the firmware
+      while (xA_axis.distanceToGo != 0 || xB_axis.distanceToGo != 0) {
+        xA_axis.run();
+        xB_axis.run();
+      }
+      xA_encoder_pos = xA_encoder.read() * 2 * 3.1459265 * 6.3661977; // set new encoder position in mm
+      xB_encoder_pos = xB_encoder.read() * 2 * 3.1459265 * 6.3661977; // set new encoder position in mm
+      y_encoder_pos = y_encoder.read() * 2 * 3.1459265 * 6.3661977; // set new encoder position in mm
     }
-
-    xA_axis.setCurrentPosition(xA_encoder_pos);
+    xA_axis.setCurrentPosition(xA_encoder_pos); //reset the xa position in accel stepper to match the encoder position
+    xB_axis.setCurrentPosition(xA_encoder_pos); //reset the xB position in accel stepper to match the encoder position
     Serial.println("calibrate_xA+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n+++++++++++++++++++++++++");
     delay(10000);
   }
