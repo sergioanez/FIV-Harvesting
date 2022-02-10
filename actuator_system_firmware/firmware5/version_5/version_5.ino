@@ -19,6 +19,13 @@ Encoder y_encoder(14, 15); // pin 10, pin 11
 String dataIn = "";
 int xPos = 0;
 int yPos = 0;
+double xA_encoder_pos = 0;
+double xB_encoder_pos = 0;
+double y_encoder_pos = 0;
+
+
+double xA_pos_correction = 0;
+double xB_pos_correction = 0;
 
 // Definitions
 int defaultSpd = 40000;
@@ -60,37 +67,37 @@ void loop() {
   }
 
   // Read Encoder Digital
-  double xA_encoder_pos = xA_encoder.read() * 2 * 3.1459265 * 6.3661977 / total_steps; //in mm
-  double xB_encoder_pos = xB_encoder.read() * 2 * 3.1459265 * 6.3661977 / total_steps; //in mm
-  double y_encoder_pos = y_encoder.read() * 2 * 3.1459265 * 6.3661977 / total_steps; //in mm
+  xA_encoder_pos = xA_encoder.read() * 2 * 3.1459265 * 6.3661977; // total_steps; //in mm
+  xB_encoder_pos = xB_encoder.read() * 2 * 3.1459265 * 6.3661977; // total_steps; //in mm
+  y_encoder_pos = y_encoder.read() * 2 * 3.1459265 * 6.3661977; // total_steps; //in mm
 
 
 
   // Closed-Loop: Correct the stepper position
-  if (xA_encoder_pos != x_pos || xA_encoder_pos != x_pos && xA_axis.isRunning() == false && xB_axis.isRunning() == false) {
+  if (xA_encoder_pos != xPos || xA_encoder_pos != xPos && xA_axis.isRunning() == false && xB_axis.isRunning() == false) {
     //if the accelstepper postion and the encoder postion dont match, also the motor is not running
     //reset the position in accel stepper to match the encoder position
 
-    xA_pos_correction = x_pos - xA_encoder_pos;
-    xB_pos_correction = x_pos - xB_encoder_pos;
+    xA_pos_correction = xPos - xA_encoder_pos;
+    xB_pos_correction = xPos - xB_encoder_pos;
 
     xA_axis.move(xA_pos_correction);
     xA_axis.move(xA_pos_correction);
 
-  while (xA_encoder_pos != x_pos || xA_encoder_pos != x_pos){
-    xA_axis.run();
-    xB_axis.run();
-  }
-  
+    while (xA_encoder_pos != xPos || xA_encoder_pos != xPos) {
+      xA_axis.run();
+      xB_axis.run();
+    }
+
     xA_axis.setCurrentPosition(xA_encoder_pos);
     Serial.println("calibrate_xA+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n+++++++++++++++++++++++++");
     delay(10000);
   }
   xA_axis.moveTo(xPos);
 
-    xA_axis.run();
-    xB_axis.run();
-    y_axis.run();
+  xA_axis.run();
+  xB_axis.run();
+  y_axis.run();
 
 }
 
@@ -98,11 +105,11 @@ void loop() {
 float parseInputPos(String in, char coord) {
   String sub  = "";
   float val  = 0;
-  if (coord == 'x' &&  in.substring(0,1)=='<') {
+  if (coord == 'x' &&  in.substring(0, 1) == '<') {
     sub  = in.substring(in.indexOf('X') + 1, in.indexOf('Y'));
     val = sub.toFloat();
   }
-  if (coord == 'y' && in.substring(0,1)=='<') {
+  if (coord == 'y' && in.substring(0, 1) == '<') {
     sub  = in.substring(in.indexOf('Y') + 1, in.indexOf('>'));
     val = sub.toFloat();
   }
