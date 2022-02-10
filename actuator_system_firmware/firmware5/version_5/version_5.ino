@@ -5,8 +5,6 @@
 #include <AccelStepper.h> // https://www.pjrc.com/teensy/td_libs_AccelStepper.html
 #include <Encoder.h> // https://www.pjrc.com/teensy/td_libs_Encoder.html
 
-
-
 AccelStepper xA_axis(1, 3, 2); // pin 3 = step, pin 2 = direction
 AccelStepper xB_axis(1, 4, 5); // pin 3 = step, pin 2 = direction
 AccelStepper y_axis(1, 6, 7); // pin 3 = step, pin 2 = direction
