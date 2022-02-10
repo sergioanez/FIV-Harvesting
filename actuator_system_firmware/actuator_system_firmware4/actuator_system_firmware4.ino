@@ -70,19 +70,19 @@ void loop() {
 
 
   // Closed-Loop: Correct the stepper position
-  if (xA_encoder_pos != xA_axis.currentPosition() && xA_axis.isRunning() == false) {
-    //if the accelstepper postion and the encoder postion dont match, also the motor is not running
-    //reset the position in accel stepper to match the encoder position
-    xA_axis.setCurrentPosition(xA_encoder_pos );
-    Serial.println("calibrate_xA+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n+++++++++++++++++++++++++");
-    delay(10000);
-  }
+//  if (xA_encoder_pos != xA_axis.currentPosition() && xA_axis.isRunning() == false) {
+//    //if the accelstepper postion and the encoder postion dont match, also the motor is not running
+//    //reset the position in accel stepper to match the encoder position
+//    xA_axis.setCurrentPosition(xA_encoder_pos );
+//    Serial.println("calibrate_xA+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n+++++++++++++++++++++++++");
+//    delay(10000);
+//  }
 
   xA_axis.moveTo(xPos);
 
-  if (xA_axis.distanceToGo() != 0) {
+ // if (xA_axis.distanceToGo() != 0) {
     xA_axis.run();
-  }
+ // }
 
 }
 
