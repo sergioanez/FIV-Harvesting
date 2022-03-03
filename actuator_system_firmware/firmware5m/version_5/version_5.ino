@@ -53,8 +53,8 @@ void loop() {
   //Read Serial
   if (Serial.available()) {       // Check if there's data
     dataIn = Serial.readString();           // Read said data into the variable "in" <X345.3Y34532.3>
-    x_pos = parseInputPos(dataIn, 'x');
-    y_pos = parseInputPos(dataIn, 'y');
+    x_pos = parseInputPos(dataIn, 'x') * 2 * 3.1459265 * 6.3661977;
+    y_pos = parseInputPos(dataIn, 'y') * 2 * 3.1459265 * 6.3661977;
   }
 
   // Read Encoder Digital IO
@@ -63,7 +63,7 @@ void loop() {
   y_encoder_pos = y_encoder.read() * 2 * 3.1459265 * 6.3661977; // total_steps; //in mm
 
   //Print to serial current encoder postions.... delay printing by some constant defined in logical i.e. 70 loop iterations. This will slow the bottle neck in the serial terminal.
-  if (i >= 500) {
+  if (i >= 50000000) {
     Serial.println("(XA" + String(xA_encoder_pos) + "XB" + String(xB_encoder_pos) + "Y" + String(y_encoder_pos) + ")");
     i = 0;
   }
@@ -87,7 +87,7 @@ void loop() {
        xB_axis.run();
      }
   */
-
+/*
   if (abs(xA_axis.currentPosition() - xA_encoder_pos) <= 2) { //if the accel stepper position is beyond a certain tolerance in comparison to the encoder, than correct.
     xA_axis.move(xA_axis.currentPosition() - xA_encoder_pos);
     while (abs(xA_axis.currentPosition() - xA_encoder_pos) <= 0.1) { // run the loop until tolerance is within a good range.
@@ -111,7 +111,7 @@ void loop() {
     }
     xB_axis.setCurrentPosition(y_encoder_pos); //reset where accel stepper thinks it is.
   }
-
+*/
 //Run motors normally.
   xA_axis.moveTo(x_pos);
   xB_axis.moveTo(x_pos);
