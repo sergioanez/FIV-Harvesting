@@ -34,7 +34,11 @@ void setup() {
 
 
 void loop() {
-  y_current = random(y_desired - 2, y_desired + 3);
+  // random signal 
+  xA_ref = random(xA_current - 1, xB_current + 2);
+  xB_ref = xA_ref
+  y_ref = random(y_current - 1, y_current + 2);
+  
     // convert encoder into position in mm (encoder has 1000 cpr and radius of pulley is 6.3661977)
 //  xA_current = xA_encoder.read() * 2 * 3.1459265 * 6.3661977 / 1000;
 //  xB_current = xB_encoder.read() * 2 * 3.1459265 * 6.3661977 / 1000;
@@ -46,43 +50,47 @@ void loop() {
   y_current = round(y_encoder.read() * 400 / 1000);
 
   // calculate positional error
-  xA_error = xA_current - xA_desired;
-  xB_error = xB_current - xB_desired;
-  y_error = y_current - y_desired;
+//  xA_error = xA_current - xA_desired;
+//  xB_error = xB_current - xB_desired;
+//  y_error = y_current - y_desired;
 
-  if (xA_error > 0) {
+  if (xA_current > xA_ref) {
      digitalWrite(xA_dir_Pin,LOW);
-      else {
+     digitalWrite(xA_step_Pin,HIGH); 
+     delayMicroseconds(500); 
+     digitalWrite(xA_step_Pin,LOW); 
+      else if(xA_current < xA_ref){
         digitalWrite(xA_dir_Pin,HIGH);
-      }
-  }
-  if (xB_error > 0) {
-     digitalWrite(xB_dir_Pin,LOW);
-      else {
-        digitalWrite(xB_dir_Pin,HIGH);
-      }
-  }
-    if (y_error > 0) {
-     digitalWrite(y_dir_Pin,LOW);
-      else {
-        digitalWrite(y_dir_Pin,HIGH);
+        digitalWrite(xA_step_Pin,HIGH); 
+        delayMicroseconds(500); 
+        digitalWrite(xA_step_Pin,LOW); 
       }
   }
 
-if (xA_error != 0) {
-    digitalWrite(xA_step_Pin,HIGH); 
-    delayMicroseconds(500); 
-    digitalWrite(xA_step_Pin,LOW); 
-}      
-if (xB_error != 0) {
-    digitalWrite(xB_step_Pin,HIGH); 
-    delayMicroseconds(500); 
-    digitalWrite(xB_step_Pin,LOW); 
-}  
-if (xA_error != 0) {
-    digitalWrite(y_step_Pin,HIGH); 
-    delayMicroseconds(500); 
-    digitalWrite(y_step_Pin,LOW); 
-}  
+  if (xB_current > xB_ref) {
+     digitalWrite(xB_dir_Pin,LOW);
+     digitalWrite(xB_step_Pin,HIGH); 
+     delayMicroseconds(500); 
+     digitalWrite(xB_step_Pin,LOW); 
+      else if(xB_current < xB_ref){
+        digitalWrite(xB_dir_Pin,HIGH);
+        digitalWrite(xB_step_Pin,HIGH); 
+        delayMicroseconds(500); 
+        digitalWrite(xB_step_Pin,LOW); 
+      }
+  }
+
+  if (y_current > y_ref) {
+     digitalWrite(y_dir_Pin,LOW);
+     digitalWrite(y_step_Pin,HIGH); 
+     delayMicroseconds(500); 
+     digitalWrite(y_step_Pin,LOW); 
+      else if(y_current < y_ref){
+        digitalWrite(y_dir_Pin,HIGH);
+        digitalWrite(y_step_Pin,HIGH); 
+        delayMicroseconds(500); 
+        digitalWrite(y_step_Pin,LOW); 
+      }
+  }
 
 }
