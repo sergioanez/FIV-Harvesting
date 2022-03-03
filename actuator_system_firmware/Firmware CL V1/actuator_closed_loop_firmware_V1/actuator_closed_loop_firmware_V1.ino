@@ -13,6 +13,10 @@ int xA_desired = 0;
 int xB_desired = 0;
 int y_desired = 0;
 
+int xA_current = 0;
+int xB_current = 0;
+int y_current = 0;
+
 // define encoder pins A and B
 Encoder xA_encoder(8, 9); 
 Encoder xB_encoder(10, 11); 
@@ -30,6 +34,7 @@ void setup() {
 
 
 void loop() {
+  y_current = random(y_desired - 2, y_desired + 3);
     // convert encoder into position in mm (encoder has 1000 cpr and radius of pulley is 6.3661977)
 //  xA_current = xA_encoder.read() * 2 * 3.1459265 * 6.3661977 / 1000;
 //  xB_current = xB_encoder.read() * 2 * 3.1459265 * 6.3661977 / 1000;
