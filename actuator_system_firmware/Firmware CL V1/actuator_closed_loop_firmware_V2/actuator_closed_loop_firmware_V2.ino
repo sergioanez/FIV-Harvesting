@@ -36,9 +36,9 @@ void setup() {
   pinMode(y_step_Pin, OUTPUT);
   pinMode(y_dir_Pin, OUTPUT);
   
-  xA_encoder.write(500);
-  xB_encoder.write(500);
-  y_encoder.write(250);
+  xA_encoder.write(0);
+  xB_encoder.write(0);
+  y_encoder.write(0);
 
     Serial.begin(9600);
 }
@@ -52,13 +52,15 @@ void loop() {
 
   //Read Serial reference signal
   if (Serial.available()) {       // Check if there's data
-    dataIn = String(Serial.readBytes(512, 50));           // Read data into the variable "in" <X345.3Y34532.3>
+   // dataIn = String(Serial.readBytes(512, 50)); // Read data into the variable "in" <X345.3Y34532.3>
+   dataIn = Serial.readStringUntil('\n');
+   Serial.println(dataIn);
     x_ref = parseInputPos(dataIn, 'x') * spr / (3.1459265 * 6.3661977); //reads reference x position and converts mm position input into step domain
     y_ref = parseInputPos(dataIn, 'y') * spr / (3.1459265 * 6.3661977); // reads reference y position adn converts mm position input into step domain
   }
 
   
-  Serial.println(Serial.readBytes(512, 50));
+
 //Serial.println(y_current);
   // random signal
 //    xA_ref = random(xA_current - 1, xB_current + 3);
