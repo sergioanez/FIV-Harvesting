@@ -20,9 +20,9 @@ int spr = 400;
 String dataIn = "";
 
 // define encoder pins A and B
-  Encoder xA_encoder(7, 8);
-  Encoder xB_encoder(11, 12);
-  Encoder y_encoder(9, 10);
+Encoder xA_encoder(7, 8);
+Encoder xB_encoder(11, 12);
+Encoder y_encoder(9, 10);
 
 
 int count = 0;
@@ -35,12 +35,13 @@ void setup() {
   pinMode(xB_dir_Pin, OUTPUT);
   pinMode(y_step_Pin, OUTPUT);
   pinMode(y_dir_Pin, OUTPUT);
-  
+
   xA_encoder.write(0);
   xB_encoder.write(0);
   y_encoder.write(0);
 
-    Serial.begin(9600);
+  Serial.begin(20000000);
+  CCM_CSCDR1 = 105450240;
 }
 
 
@@ -52,40 +53,14 @@ void loop() {
 
   //Read Serial reference signal
   if (Serial.available()) {       // Check if there's data
-   // dataIn = String(Serial.readBytes(512, 50)); // Read data into the variable "in" <X345.3Y34532.3>
-   dataIn = Serial.readStringUntil('\n');
-   Serial.println(dataIn);
+    // dataIn = String(Serial.readBytes(512, 50)); // Read data into the variable "in" <X345.3Y34532.3>
+    dataIn = Serial.readStringUntil('\n');
+    Serial.println(dataIn);
     x_ref = parseInputPos(dataIn, 'x') * spr / (3.1459265 * 6.3661977); //reads reference x position and converts mm position input into step domain
     y_ref = parseInputPos(dataIn, 'y') * spr / (3.1459265 * 6.3661977); // reads reference y position adn converts mm position input into step domain
   }
 
-  
 
-//Serial.println(y_current);
-  // random signal
-//    xA_ref = random(xA_current - 1, xB_current + 3);
-//    xB_ref = xA_ref;
-//    y_ref = random(y_current - 1, y_current + 3);
-
-//    xA_ref = 4500*sin(0.001*count);
-//    xB_ref = 4500*sin(0.001*count);
-//     y_ref =  5000*sin(0.001*count);
-//count++;
-
-  // convert encoder into position in mm (encoder has 1000 cpr and radius of pulley is 6.3661977)
-  //  xA_current = xA_encoder.read() * 2 * 3.1459265 * 6.3661977 / 1000;
-  //  xB_current = xB_encoder.read() * 2 * 3.1459265 * 6.3661977 / 1000;
-  //  y_current = y_encoder.read() * 2 * 3.1459265 * 6.3661977 / 1000;
-
-
-
-  // calculate positional error
-  //  xA_error = xA_current - xA_ref;
-  //  xB_error = xB_current - xB_ref;
-  //  y_error = y_current - y_ref;
-//  digitalWrite(xA_dir_Pin, LOW);
-//  digitalWrite(xB_dir_Pin, LOW);
-//  digitalWrite(y_dir_Pin, LOW);
 
   if (xA_current > x_ref) {
     digitalWrite(xA_dir_Pin, LOW);
