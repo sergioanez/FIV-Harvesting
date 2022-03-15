@@ -15,6 +15,13 @@ float y_dist = 0;
 float spr = 400;
 
 void setup() {
+  pinMode(2, INPUT);
+  pinMode(3, INPUT);
+  pinMode(4, INPUT);
+  pinMode(5, INPUT);
+  pinMode(6, INPUT);
+  pinMode(7, INPUT);
+  
   Serial.begin(20000000);
   CCM_CSCDR1 = 105450240;
 }
@@ -30,10 +37,13 @@ void loop() {
   xB_current = round(xB_encoder.read() * spr / 1000);
   y_current  = -round(y_encoder.read() * spr / 1000);
 
-  xA_dist = xA_current * (3.1459265 * 6.3661977) / spr ;
-  xB_dist = xB_current * (3.1459265 * 6.3661977) / spr ;
-  y_dist = y_current * (3.1459265 * 6.3661977) / spr ;
+ // xA_dist = xA_current * (3.1459265 * 6.3661977) / spr ;
+  //xB_dist = xB_current * (3.1459265 * 6.3661977) / spr ;
+  //y_dist = y_current * (3.1459265 * 6.3661977) / spr ;
 
+xA_dist = xA_current ;
+xB_dist =  xB_current ;
+y_dist =  y_current ;
 
   delay(100);
 

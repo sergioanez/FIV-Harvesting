@@ -9,12 +9,12 @@ const int y_step_Pin = 2;
 const int y_dir_Pin = 1;
 
 // define inputs from neural network
-int x_ref = 0;
-int y_ref = 0;
+float x_ref = 0;
+float y_ref = 0;
 
-int xA_current = 0;
-int xB_current = 0;
-int y_current = 0;
+float xA_current = 0;
+float xB_current = 0;
+float y_current = 0;
 
 int spr = 400;
 String dataIn = "";
@@ -26,7 +26,7 @@ Encoder y_encoder(9, 10);
 
 
 int count = 0;
-int spd = 200;
+int spd = 100;
 void setup() {
   // Set the stepper pins as Outputs
   pinMode(xA_step_Pin, OUTPUT);
@@ -55,9 +55,9 @@ void loop() {
   if (Serial.available()) {       // Check if there's data
     // dataIn = String(Serial.readBytes(512, 50)); // Read data into the variable "in" <X345.3Y34532.3>
     dataIn = Serial.readStringUntil('\n');
-    Serial.println(dataIn);
-    x_ref = parseInputPos(dataIn, 'x') * spr / (3.1459265 * 6.3661977); //reads reference x position and converts mm position input into step domain
-    y_ref = parseInputPos(dataIn, 'y') * spr / (3.1459265 * 6.3661977); // reads reference y position adn converts mm position input into step domain
+   // Serial.println(dataIn);
+    x_ref =  round(parseInputPos(dataIn, 'x') * spr / (3.1459265 * 6.3661977)); //reads reference x position and converts mm position input into step domain
+    y_ref =  round(parseInputPos(dataIn, 'y') * spr / (3.1459265 * 6.3661977)); // reads reference y position adn converts mm position input into step domain
   }
 
 
