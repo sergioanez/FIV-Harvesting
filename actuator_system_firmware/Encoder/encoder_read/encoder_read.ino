@@ -12,7 +12,7 @@ float y_current = 0;
 float xA_dist = 0;
 float xB_dist = 0;
 float y_dist = 0;
-float spr = 400;
+float spr = 400*64;
 
 void setup() {
   pinMode(2, INPUT);
@@ -28,24 +28,23 @@ void setup() {
 
 void loop() {
 
-  if ( round(xA_encoder.read() * spr / 1000) != xA_current || round(xB_encoder.read() * spr / 1000) != xB_current || round(y_encoder.read() * spr / 1000) != y_current) {
+  if ( round(xA_encoder.read() / 4000)*spr != xA_current || round(xB_encoder.read() * spr / 4000)*spr != xB_current || round(y_encoder.read() * spr / 4000)*spr != y_current) {
     Serial.print( String(float(millis())) + "," + String(xA_dist) + "," + String(xB_dist) + "," + String(y_dist) + "\n");
   }
 
   // put your main code here, to run repeatedly:
-  xA_current = round(xA_encoder.read() * spr / 1000);
-  xB_current = round(xB_encoder.read() * spr / 1000);
-  y_current  = -round(y_encoder.read() * spr / 1000);
+  xA_current = xA_encoder.read() ;
+  xB_current = xB_encoder.read();
+  y_current  = y_encoder.read() ;
 
- // xA_dist = xA_current * (3.1459265 * 6.3661977) / spr ;
-  //xB_dist = xB_current * (3.1459265 * 6.3661977) / spr ;
-  //y_dist = y_current * (3.1459265 * 6.3661977) / spr ;
+  xA_dist = (xA_current / 4000)*spr;
+  xB_dist = (xB_current / 4000)*spr;
+  y_dist = (-y_current / 4000)*spr;
 
-xA_dist = xA_current ;
-xB_dist =  xB_current ;
-y_dist =  y_current ;
 
-  delay(100);
+
+
+  //delay(1000);
 
 
 }

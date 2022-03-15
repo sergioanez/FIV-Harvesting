@@ -30,7 +30,7 @@ Encoder y_encoder(9, 10);
 
 
 int count = 0;
-int spd = 600;
+int spd = 100;
 
 
 
@@ -58,8 +58,8 @@ void loop() {
   xB_current = xB_encoder.read();
   y_current  = y_encoder.read() ;
 
-  xA_enc_step = (xA_current / 4000)/spr;
-  xB_enc_step = (xB_current / 4000)/spr;
+  xA_enc_step = (xA_current / 4000)*spr;
+  xB_enc_step = (xB_current / 4000)*spr;
   y_enc_step = (-y_current / 4000)*spr;
 
   //Read Serial reference signal
@@ -78,7 +78,8 @@ xB_enc_step = round(xB_enc_step);
 x_ref = round(x_ref);
 y_enc_step = round(y_enc_step);
 y_ref = round(y_ref);
-Serial.println(String(y_ref) + ","+ y_enc_step+ ","+ y_encoder.read());
+
+//Serial.println(String(x_ref) + ","+ snprintf (20, sizeof(20), "%f", xA_enc_step) + ","+ String(xB_enc_step));
 
 //Logic
   if (xA_enc_step > x_ref) {
