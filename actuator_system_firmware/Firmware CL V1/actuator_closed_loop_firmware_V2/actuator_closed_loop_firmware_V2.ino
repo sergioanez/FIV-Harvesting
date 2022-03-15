@@ -20,7 +20,7 @@ float xA_enc_step = 0;
 float xB_enc_step = 0;
 float y_enc_step = 0;
 
-float spr = 400*16;
+float spr = 400*64; //400 full steps per revolution with 64 microstepping enabled
 String dataIn = "";
 
 // define encoder pins A and B
