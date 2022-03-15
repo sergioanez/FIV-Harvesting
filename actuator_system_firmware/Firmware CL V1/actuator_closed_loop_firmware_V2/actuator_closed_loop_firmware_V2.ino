@@ -16,7 +16,11 @@ float xA_current = 0;
 float xB_current = 0;
 float y_current = 0;
 
-int spr = 400;
+float xA_enc_step = 0;
+float xB_enc_step = 0;
+float y_enc_step = 0;
+
+float spr = 400*16;
 String dataIn = "";
 
 // define encoder pins A and B
@@ -26,7 +30,10 @@ Encoder y_encoder(9, 10);
 
 
 int count = 0;
-int spd = 100;
+int spd = 600;
+
+
+
 void setup() {
   // Set the stepper pins as Outputs
   pinMode(xA_step_Pin, OUTPUT);
@@ -47,65 +54,77 @@ void setup() {
 
 void loop() {
   // read and convert encoder into count into steps
-  xA_current = round(xA_encoder.read() * spr / 1000);
-  xB_current = round(xB_encoder.read() * spr / 1000);
-  y_current  = -round(y_encoder.read() * spr / 1000);
+  xA_current = xA_encoder.read() ;
+  xB_current = xB_encoder.read();
+  y_current  = y_encoder.read() ;
+
+  xA_enc_step = (xA_current / 4000)/spr;
+  xB_enc_step = (xB_current / 4000)/spr;
+  y_enc_step = (-y_current / 4000)*spr;
 
   //Read Serial reference signal
   if (Serial.available()) {       // Check if there's data
     // dataIn = String(Serial.readBytes(512, 50)); // Read data into the variable "in" <X345.3Y34532.3>
     dataIn = Serial.readStringUntil('\n');
    // Serial.println(dataIn);
-    x_ref =  round(parseInputPos(dataIn, 'x') * spr / (3.1459265 * 6.3661977)); //reads reference x position and converts mm position input into step domain
-    y_ref =  round(parseInputPos(dataIn, 'y') * spr / (3.1459265 * 6.3661977)); // reads reference y position adn converts mm position input into step domain
+    x_ref =  parseInputPos(dataIn, 'x'); //reads reference x position and converts mm position input into step domain
+    y_ref =  parseInputPos(dataIn, 'y'); // reads reference y position adn converts mm position input into step domain
   }
 
 
+//Round
+xA_enc_step = round(xA_enc_step);
+xB_enc_step = round(xB_enc_step);
+x_ref = round(x_ref);
+y_enc_step = round(y_enc_step);
+y_ref = round(y_ref);
+Serial.println(String(y_ref) + ","+ y_enc_step+ ","+ y_encoder.read());
 
-  if (xA_current > x_ref) {
+//Logic
+  if (xA_enc_step > x_ref) {
     digitalWrite(xA_dir_Pin, LOW);
     digitalWrite(xA_step_Pin, HIGH);
     delayMicroseconds(spd);
     digitalWrite(xA_step_Pin, LOW);
-  } else if (xA_current < x_ref) {
+  } else if (xA_enc_step < x_ref) {
     digitalWrite(xA_dir_Pin, HIGH);
     digitalWrite(xA_step_Pin, HIGH);
     delayMicroseconds(spd);
     digitalWrite(xA_step_Pin, LOW);
   }
-  else if (xA_current == x_ref) {
+  else if (xA_enc_step == x_ref) {
     digitalWrite(xA_step_Pin, LOW);
   }
 
-  if (xB_current > x_ref) {
+  if (xB_enc_step > x_ref) {
     digitalWrite(xB_dir_Pin, LOW);
     digitalWrite(xB_step_Pin, HIGH);
     delayMicroseconds(spd);
     digitalWrite(xB_step_Pin, LOW);
   }
-  else if (xB_current < x_ref) {
+  else if (xB_enc_step < x_ref) {
     digitalWrite(xB_dir_Pin, HIGH);
     digitalWrite(xB_step_Pin, HIGH);
     delayMicroseconds(spd);
     digitalWrite(xB_step_Pin, LOW);
   }
-  else if (xB_current == x_ref) {
+  else if (xB_enc_step == x_ref) {
     digitalWrite(xB_step_Pin, LOW);
   }
 
-  if (y_current > y_ref) {
+  if (y_enc_step > y_ref) {
     digitalWrite(y_dir_Pin, LOW);
     digitalWrite(y_step_Pin, HIGH);
     delayMicroseconds(spd);
     digitalWrite(y_step_Pin, LOW);
   }
-  else if (y_current < y_ref) {
+  else if (y_enc_step < y_ref) {
     digitalWrite(y_dir_Pin, HIGH);
     digitalWrite(y_step_Pin, HIGH);
     delayMicroseconds(spd);
     digitalWrite(y_step_Pin, LOW);
   }
-  else if (y_current == y_ref) {
+  else if (y_enc_step == y_ref) {
     digitalWrite(y_step_Pin, LOW);
   }
 }
