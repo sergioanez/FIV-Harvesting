@@ -20,7 +20,7 @@ float xA_enc_step = 0;
 float xB_enc_step = 0;
 float y_enc_step = 0;
 
-float spr = 400*64; //400 full steps per revolution with 64 microstepping enabled
+float spr = 400 * 64; //400 full steps per revolution with 64 microstepping enabled
 String dataIn = "";
 
 // define encoder pins A and B
@@ -30,7 +30,7 @@ Encoder y_encoder(9, 10);
 
 
 int count = 0;
-int spd = 100;
+int spd = 10;
 
 
 
@@ -58,30 +58,31 @@ void loop() {
   xB_current = xB_encoder.read();
   y_current  = y_encoder.read() ;
 
-  xA_enc_step = (xA_current / 4000)*spr;
-  xB_enc_step = (xB_current / 4000)*spr;
-  y_enc_step = (-y_current / 4000)*spr;
+  xA_enc_step = (xA_current / 4000) * spr;
+  xB_enc_step = (xB_current / 4000) * spr;
+  y_enc_step = (-y_current / 4000) * spr;
 
   //Read Serial reference signal
   if (Serial.available()) {       // Check if there's data
     // dataIn = String(Serial.readBytes(512, 50)); // Read data into the variable "in" <X345.3Y34532.3>
     dataIn = Serial.readStringUntil('\n');
-   // Serial.println(dataIn);
+    // Serial.println(dataIn);
     x_ref =  parseInputPos(dataIn, 'x'); //reads reference x position and converts mm position input into step domain
     y_ref =  parseInputPos(dataIn, 'y'); // reads reference y position adn converts mm position input into step domain
+    spd = parseInputPos(dataIn, 'v');
   }
 
 
-//Round
-xA_enc_step = round(xA_enc_step);
-xB_enc_step = round(xB_enc_step);
-x_ref = round(x_ref);
-y_enc_step = round(y_enc_step);
-y_ref = round(y_ref);
+  //Round
+  xA_enc_step = round(xA_enc_step);
+  xB_enc_step = round(xB_enc_step);
+  x_ref = round(x_ref);
+  y_enc_step = round(y_enc_step);
+  y_ref = round(y_ref);
 
-//Serial.println(String(x_ref) + ","+ snprintf (20, sizeof(20), "%f", xA_enc_step) + ","+ String(xB_enc_step));
+  //Serial.println(String(x_ref) + ","+ snprintf (20, sizeof(20), "%f", xA_enc_step) + ","+ String(xB_enc_step));
 
-//Logic
+  //Logic
   if (xA_enc_step > x_ref) {
     digitalWrite(xA_dir_Pin, LOW);
     digitalWrite(xA_step_Pin, HIGH);
@@ -140,7 +141,11 @@ float parseInputPos(String in, char coord) {
     val = sub.toFloat();
   }
   if (coord == 'y' && in.substring(0, 1) == '<') {
-    sub  = in.substring(in.indexOf('Y') + 1, in.indexOf('>'));
+    sub  = in.substring(in.indexOf('Y') + 1, in.indexOf('V'));
+    val = sub.toFloat();
+  }
+    if (coord == 'v' && in.substring(0, 1) == '<') {
+    sub  = in.substring(in.indexOf('V') + 1, in.indexOf('>'));
     val = sub.toFloat();
   }
   return val ;
