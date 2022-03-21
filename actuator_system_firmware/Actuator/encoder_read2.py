@@ -34,13 +34,16 @@ while True:
     s = str(encoderData)
     s = s.replace('[', '')
     s = s.replace(']', '')
-    s2 = s.split(', ')
+    s = s.replace("'", '')
+    s = s.replace("\\n", '')
+
+    sSplit = s.split(', ')
     dataMat = np.append(dataMat,  str(encoderData))
-    print(str(time.time()) +","+str(encoderData) )
-    aTMat = float(s2[0])
-    xAMat = float(s2[0])
-    xBMat = float(s2[0])
-    yMat = float(s2[0])
+    print(time.time(), float(sSplit[0]),float(sSplit[1]),float(sSplit[2]),float(sSplit[3]))
+    aTMat = np.append(aTMat, float(sSplit[0]))
+    xAMat = np.append(xAMat, float(sSplit[1]))
+    xBMat = np.append(xBMat, float(sSplit[2]))
+    yMat  = np.append(yMat, float(sSplit[3]))
 
     counter = counter +1;
     time.sleep(0.00001)
@@ -49,5 +52,5 @@ while True:
 
     
     
-np.savetxt("fin.csv", np.transpose([tMat, dataMat]), delimiter=",", fmt='"%s"')
+np.savetxt("fin.csv", np.transpose([tMat, aTMat, xAMat, xBMat, yMat]), delimiter=",", fmt='"%s"')
 serialEncoder.close()
