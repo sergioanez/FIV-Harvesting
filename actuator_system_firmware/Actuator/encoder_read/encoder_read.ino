@@ -12,7 +12,7 @@ float y_current = 0;
 float xA_dist = 0;
 float xB_dist = 0;
 float y_dist = 0;
-float spr = 400*8;
+float spr = 400*64;
 
 void setup() {
   pinMode(2, INPUT);
