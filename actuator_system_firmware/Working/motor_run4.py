@@ -16,8 +16,9 @@ yMat =np.empty((0,3), float)
 vMat =np.empty((0,3), float)
 
 
-a = 20*8/0.1 #100*12172.8; # steps = mm * 64/0.1
-f = 1;
+amm = 5 #100*12172.8; # steps = mm * 8/0.1
+a = amm*8/0.1
+f = 2;
 t = 0;
 t1 = time.time()+0.0001;
 t2 = 0;
@@ -26,7 +27,7 @@ y2 = 1;
 delta_y = 1;
 delta_t = 0;
 res = 0.01;
-w= f*2*3.14159265;
+w = f*2*3.14159265;
 #v= round(math.cos(w*t),0)
 v = 200;
 startTime = time.time()
@@ -37,30 +38,36 @@ while True:
     t2 = t1;
     t1 = clockTime;
     delta_t = t1-t2;
-    v_test = 10/(abs(math.cos(w*t)))+250
-    v = 10000000*delta_t/(delta_y+50)
-    x = 0 #round(a*math.sin(w*t),0) # in radians
-    y =  round(a*math.sin(w*t),0)
+    v = round(delta_t/(delta_y+0.00001),0)
+    #v = round(1000000*delta_t/(delta_y+10),0)
+    if v < 10 :
+        v = 10
+
+    if v > 1000 :
+        v = 1000
+    x = round(a*math.sin(w*t),0)+ round(a*2*math.sin(w*0.5*t),0) + round(a*0.7*math.sin(w*3*t),0)
+    y = 0#round(a*math.sin(w*t),0) + round(a*2*math.sin(w*0.5*t),0) + round(a*0.7*math.sin(w*3*t),0)
     y2 = y1;
     y1 = y;
     delta_y = abs(y2 - y1);
     command  = '<X' + str(x) +'Y'+str(y) + 'V'+ str(v) +'>' + '\n'
     serialControl.write(command.encode())     # write a string #<X25Y40V400>
 
-    tMat = np.append(tMat, t)
+    tMat = np.append(tMat, clockTime)
     xMat = np.append(xMat, x)
     yMat = np.append(yMat, y)
     vMat = np.append(vMat, v)
     #print(command)
     counter = counter +1;
-    print([t,x,y,v])
+    print([t,delta_t,x,y,v])
     time.sleep(0.00100)
-    if t >= 15.00001 :
+    if t >= 10.0 :
         break
      
 i = 0
-while os.path.exists(f"foo_{i}.csv"):
+while os.path.exists(f"input_{i}.csv") or os.path.exists(f"encoder_{i}.csv"):
     i += 1
-np.savetxt(f"foo_{i}.csv", np.transpose([tMat, xMat, yMat, vMat]), delimiter=",")
+i = i - 1
+np.savetxt(f"input_{i}_3waves_a={amm}_w={f}.csv", np.transpose([tMat, xMat, yMat, vMat]), delimiter=",")
 serialControl.close()
 

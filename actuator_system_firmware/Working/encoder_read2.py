@@ -4,6 +4,7 @@ import numpy as np
 import csv
 import serial
 import re
+import os
 
 
 
@@ -30,7 +31,7 @@ while True:
     encoderData = encoderDataRaw.decode('ascii').split(",")
     
     #print(str(time.time()) +","+ str(encoderData))
-    tMat = np.append(tMat, t)
+    tMat = np.append(tMat, clockTime)
     s = str(encoderData)
     s = s.replace('[', '')
     s = s.replace(']', '')
@@ -47,10 +48,12 @@ while True:
 
     counter = counter +1;
     time.sleep(0.00001)
-    if t >= 15 :
+    if t >= 10 :
         break
 
     
-    
-np.savetxt("fin.csv", np.transpose([tMat, aTMat, xAMat, xBMat, yMat]), delimiter=",", fmt='"%s"')
+i = 0
+while os.path.exists(f"encoder_{i}.csv") or os.path.exists(f"input_{i}.csv"):
+    i += 1    
+np.savetxt(f"encoder_{i}.csv", np.transpose([tMat, aTMat, xAMat, xBMat, yMat]), delimiter=",", fmt='"%s"')
 serialEncoder.close()
