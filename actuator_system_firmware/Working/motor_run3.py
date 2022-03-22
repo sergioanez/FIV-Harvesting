@@ -14,8 +14,9 @@ yMat =np.empty((0,3), float)
 vMat =np.empty((0,3), float)
 
 
-a = 5000 #100*12172.8; # steps = mm * 64/0.1
+a = 500 #100*12172.8; # steps = mm * 64/0.1
 f = 1;
+
 t = 0;
 t1 = time.time()+0.0001;
 t2 = 0;
@@ -36,9 +37,9 @@ while True:
     t1 = clockTime;
     delta_t = t1-t2;
     v_test = 10/(abs(math.cos(w*t)))+250
-    v = 100000*delta_t/(delta_y+0.1)+250
-    x = round(a*math.sin(w*t),0) # in radians
-    y =  round(a*math.sin(w*t),0)
+    v = 100000*delta_t/(delta_y+0.1)+150
+    x = 0 #round(a*math.sin(w*t),0) # in radians
+    y =  round(a*math.sin(w*t),0) #+ round(a*2*math.sin(w*0.5*t),0) + round(a*0.5*math.sin(w*2*t),0)
     y2 = y1;
     y1 = y;
     delta_y = abs(y2 - y1);
@@ -53,7 +54,7 @@ while True:
     counter = counter +1;
     print([t,x,y,v])
     time.sleep(0.00100)
-    if t >= 10.00001 :
+    if t >= 15 :
         break
      
     
