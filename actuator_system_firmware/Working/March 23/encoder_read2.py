@@ -47,13 +47,13 @@ while True:
     yMat  = np.append(yMat, float(sSplit[3]))
 
     counter = counter +1;
-    time.sleep(0.00001)
+    time.sleep(0.0000001)
     if t >= 10 :
         break
 
     
 i = 0
-while os.path.exists(f"encoder_{i}.csv") or os.path.exists(f"input_{i}.csv"):
+while os.path.exists(f"encoder_{i}.csv"):
     i += 1    
 np.savetxt(f"encoder_{i}.csv", np.transpose([tMat, aTMat, xAMat, xBMat, yMat]), delimiter=",", fmt='"%s"')
 serialEncoder.close()
