@@ -48,7 +48,7 @@ while True:
 
     counter = counter +1;
     time.sleep(0.0000001)
-    if t >= 15 :
+    if t >= 20 :
         break
 
     
