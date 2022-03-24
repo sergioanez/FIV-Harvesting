@@ -3,8 +3,8 @@ clc
 close all
 w = 0.1;
 encoder_raw2 = [];
-input_raw = cell2mat(table2cell(readtable('foo.csv')));
-encoder_raw = cell2mat(table2cell(readtable('fin.csv',detectImportOptions('fin.csv'))));
+input_raw = cell2mat(table2cell(readtable('input_test_54.csv')));
+encoder_raw = cell2mat(table2cell(readtable('encoder_54.csv',detectImportOptions('encoder_49.csv'))));
 
 t_shift = input_raw(1,1);
 conv2mm = 0.1/8;

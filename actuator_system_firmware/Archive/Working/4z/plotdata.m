@@ -29,9 +29,9 @@ title('Inputs')
 xlim([0 5])
 
 figure
-plot(output_t, output_y+y_shift,'*', input_t, input_y);
+plot(output_t, output_y,'*', input_t, input_y);
 xlabel('Time (s)')
 ylabel('Position (mm)')
 legend({'Output','Input'})
-title('System Tracking of 10 mm Amplitude Sine Wave with 3 Hz Frequency')
+title('System Tracking of Sum of 3 Sine Waves')
 xlim([0 10])

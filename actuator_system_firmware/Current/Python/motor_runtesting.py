@@ -16,7 +16,7 @@ yMat =np.empty((0,3), float)
 vMat =np.empty((0,3), float)
 
 
-amm = 10 #100*12172.8; # steps = mm * 8/0.1
+amm = 30 #100*12172.8; # steps = mm * 8/0.1
 a = amm*8/0.1
 f = 0.5;
 t = 0;
@@ -38,21 +38,21 @@ while True:
     t2 = t1;
     t1 = clockTime;
     delta_t = t1-t2;
-    dx = abs(round(a*w*math.sin(w*t),0) + round(a*0.5*w*0.5*math.sin(w*0.5*t),0))# + round(a*3*w*0.1*math.sin(w*3*t),0)); #delta_y/delta_t;
+    dx = abs(round(a*w*math.cos(w*t),0)) #+ round(a*0.5*w*0.5*math.sin(w*0.5*t),0))# + round(a*3*w*0.1*math.sin(w*3*t),0)); #delta_y/delta_t;
     
     if dx == 0:
         v=1000
     else:
-        v = 700000/dx  #v = 1000000/dx  920000/dx
+        v = 1000000/dx  #v = 1000000/dx  920000/dx
         
     if v < 20 :
         v = 20
 
-    if v > 1000 :
-        v = 1000
+    if v > 500 :
+        v = 500
         
-    y = round(a*math.sin(w*t),0) + round(a*0.5*math.sin(w*0.5*t),0) + round(a*0.1*math.sin(w*3*t),0)
-    x = 0#round(a*math.sin(w*t),0) + round(a*2*math.sin(w*0.5*t),0) + round(a*0.7*math.sin(w*3*t),0)
+    y = 12800 + round(a*math.sin(w*t),0)# + round(a*0.5*math.sin(w*0.5*t),0) + round(a*0.1*math.sin(w*3*t),0)
+    x = 16000 #round(a*math.sin(w*t),0) + round(a*2*math.sin(w*0.5*t),0) + round(a*0.7*math.sin(w*3*t),0)
     y2 = y1;
     y1 = y;
     delta_y = abs(y2 - y1);
